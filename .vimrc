@@ -66,3 +66,8 @@ set list listchars=tab:\ \ ,trail:·
 
 " Crontab settings
 autocmd filetype crontab setlocal nobackup nowritebackup
+
+" Swap current line and bottom line
+map - ddp
+" Swap current line and upper line
+map _ kddpk
