@@ -1,7 +1,9 @@
+set nocompatible
 set number
 execute pathogen#infect()
 filetype plugin indent on
 syntax on
+
 
 " New tab abbrevs
 command Nt tabnew
@@ -13,6 +15,7 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 filetype plugin indent on
+
 " Show hidden files in NerdTree
 let NERDTreeShowHidden=1
 
@@ -27,6 +30,9 @@ set showbreak=+++
 set textwidth=100 
 set showmatch " Highlight matching brace
 set visualbell  " Use visual bell (no beeping
+set hidden
+set nobackup
+set noswapfile
  
 set hlsearch  " Highlight all search results
 set smartcase " Enable smart-case search
@@ -71,3 +77,6 @@ autocmd filetype crontab setlocal nobackup nowritebackup
 map - ddp
 " Swap current line and upper line
 map _ kddpk
+
+" Some macros
+let @c = 'ci('
