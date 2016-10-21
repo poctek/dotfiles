@@ -29,6 +29,10 @@ Plug 'kchmck/vim-coffee-script'
 Plug 'mattn/gist-vim'
 Plug 'mattn/webapi-vim'
 Plug 'mileszs/ack.vim'
+Plug 'elixir-lang/vim-elixir'
+
+Plug 'kana/vim-textobj-user'
+Plug 'nelstrom/vim-textobj-rubyblock'
 
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
@@ -143,6 +147,9 @@ let $FZF_DEFAULT_COMMAND='ag -g ""'
 
 " More symbols on the line
 set tw=500
+
+" Highlight current column
+set cuc cul"
 
 " Snipets config
 let g:UltiSnipsExpandTrigger="<C-tab>"
