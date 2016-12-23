@@ -22,14 +22,23 @@ Plug 'mxw/vim-jsx'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-rails'
 Plug 'vim-ruby/vim-ruby'
-Plug 'https://github.com/tpope/vim-sensible.git'
 Plug 'slim-template/vim-slim'
 Plug 'tpope/vim-surround'
 Plug 'kchmck/vim-coffee-script'
 Plug 'mattn/gist-vim'
 Plug 'mattn/webapi-vim'
 Plug 'mileszs/ack.vim'
+Plug 'brooth/far.vim'
+Plug 'wellle/targets.vim'
+Plug 'maxbrunsfeld/vim-yankstack'
+
 Plug 'elixir-lang/vim-elixir'
+Plug 'slashmili/alchemist.vim'
+
+Plug 'xolox/vim-easytags'
+Plug 'xolox/vim-misc'
+
+Plug 'posva/vim-vue'
 
 Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
@@ -52,10 +61,6 @@ set t_Co=256
 set number
 set nocompatible
 
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
 filetype plugin indent on
 
 " Show hidden files in NerdTree
@@ -64,6 +69,11 @@ let NERDTreeShowHidden=1
 au FocusLost User :wa
 
 map <C-n> :NERDTreeToggle<CR>
+
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 "  General
 set relativenumber
@@ -113,16 +123,25 @@ let g:jsx_ext_required = 0
 let g:syntastic_ruby_checkers = ['rubocop']
 let g:syntastic_sass_checkers = ['sass']
 
+" Easytags settings
+:let g:easytags_cmd = '/usr/local/bin/ctags'
+:let g:easytags_file = '~/.vimtags'
+
 " Remove arrows
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
-" Stup tabs manipulation
-nnoremap <Tab>j :bprev<CR>
-nnoremap <Tab>k :bnext<CR>
+" Tabs
+nnoremap TE :tabedit<CR>
+nnoremap TQ :tabclose<CR>
+nnoremap TO <C-w>T
+
+" Buffers
 nnoremap <Tab>n :buffers<CR>:buffer<SPACE>
+nnoremap HH :bn<CR>
+nnoremap LL :bp<CR>
 
 " Remap escape to jj
 inoremap jj <ESC>
