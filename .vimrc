@@ -18,7 +18,6 @@ Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
 Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-rails'
 Plug 'vim-ruby/vim-ruby'
@@ -30,18 +29,19 @@ Plug 'mattn/webapi-vim'
 Plug 'mileszs/ack.vim'
 Plug 'brooth/far.vim'
 Plug 'wellle/targets.vim'
-Plug 'maxbrunsfeld/vim-yankstack'
+Plug 'thoughtbot/vim-rspec'
 
 Plug 'elixir-lang/vim-elixir'
 Plug 'slashmili/alchemist.vim'
 
-Plug 'xolox/vim-easytags'
-Plug 'xolox/vim-misc'
-
 Plug 'posva/vim-vue'
+
+Plug 'fatih/vim-go'
 
 Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
+
+Plug 'zenbro/mirror.vim'
 
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
@@ -65,6 +65,8 @@ filetype plugin indent on
 
 " Show hidden files in NerdTree
 let NERDTreeShowHidden=1
+" Remove one-child dirs collapsing
+let NERDTreeCascadeSingleChildDir=0
 
 au FocusLost User :wa
 
@@ -86,6 +88,7 @@ set hidden
 set nobackup
 set noswapfile
 set scrolloff=3
+set regexpengine=1 " Old-style regex highlighting
 
 set hlsearch  " Highlight all search results
 set smartcase " Enable smart-case search
@@ -111,6 +114,8 @@ set showcmd
 " path to python interpreter
 let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 
+let g:python_host_prog = '/usr/bin/python'
+
 " JavaScript libraries settings
 let g:used_javascript_libs = 'jquery, angularjs, angularui, react'
 
@@ -121,11 +126,9 @@ let g:jsx_ext_required = 0
 
 " Syntastic settings
 let g:syntastic_ruby_checkers = ['rubocop']
-let g:syntastic_sass_checkers = ['sass']
-
-" Easytags settings
-:let g:easytags_cmd = '/usr/local/bin/ctags'
-:let g:easytags_file = '~/.vimtags'
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_jsx_checkers = ['eslint']
+let g:syntastic_sass_checkers = ['scss_lint']
 
 " Remove arrows
 noremap <Up> <NOP>
@@ -134,14 +137,12 @@ noremap <Left> <NOP>
 noremap <Right> <NOP>
 
 " Tabs
-nnoremap TE :tabedit<CR>
+nnoremap TN :tabnew<CR>
 nnoremap TQ :tabclose<CR>
 nnoremap TO <C-w>T
 
 " Buffers
 nnoremap <Tab>n :buffers<CR>:buffer<SPACE>
-nnoremap HH :bn<CR>
-nnoremap LL :bp<CR>
 
 " Remap escape to jj
 inoremap jj <ESC>
@@ -159,6 +160,12 @@ map _ kddpk
 
 " Use : instead of ;
 nmap ; :
+
+" \\ to navigate last to open files
+nnoremap <leader><leader> <c-^>
+
+" ==== Ruby aliases ====
+map <Leader>rs f:xi =>jj
 
 " FZF config
 map <C-p> :FZF<CR>
@@ -194,9 +201,12 @@ endif
 " Ack.vim config
 let g:ackprg = 'ag --nogroup --nocolor --column'
 
-" Edit the macros quickly
-nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-
 " Not jump to the first result with search
 cnoreabbrev ag Ack!
 nnoremap <Leader>a :Ack!<Space>
+
+" Slim filetype
+autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
+
+" Set regex engine manually
+set regexpengine=1
