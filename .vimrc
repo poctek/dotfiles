@@ -13,7 +13,8 @@ Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'tomtom/tcomment_vim'
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
@@ -139,6 +140,7 @@ noremap <Right> <NOP>
 " Tabs
 nnoremap TN :tabnew<CR>
 nnoremap TQ :tabclose<CR>
+nnoremap TE :tabe %<CR>
 nnoremap TO <C-w>T
 
 " Buffers
@@ -146,6 +148,9 @@ nnoremap <Tab>n :buffers<CR>:buffer<SPACE>
 
 " Remap escape to jj
 inoremap jj <ESC>
+
+" Search visual selection
+vnoremap // y/<C-R>"<CR>
 
 " Show dots with indents
 set list listchars=tab:\ \ ,trail:·
@@ -210,3 +215,6 @@ autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
 
 " Set regex engine manually
 set regexpengine=1
+
+" Airline caching speed up
+let g:airline_highlighting_cache=1

@@ -1,0 +1,75 @@
+filetype plugin indent on
+syntax on
+set t_Co=256
+
+set number
+set nocompatible
+
+" New tab abbrevs
+command Nt tabnew
+command Tn tabnext
+command Tp tabprevious
+
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+filetype plugin indent on
+
+au FocusLost * :wa
+
+"  General
+set relativenumber
+set linebreak
+set showbreak=+++
+set textwidth=100
+set showmatch " Highlight matching brace
+set visualbell  " Use visual bell (no beeping
+set hidden
+set nobackup
+set noswapfile
+set scrolloff=3
+
+set hlsearch  " Highlight all search results
+set smartcase " Enable smart-case search
+set ignorecase  " Always case-insensitive
+set incsearch " Searches for strings incrementally
+
+set autoindent  " Auto-indent new lines
+set shiftwidth=2  " Number of auto-indent spaces
+set smartindent " Enable smart-indent
+set softtabstop=2 " Number of spaces per Tab
+
+" Advanced
+set ruler " Show row and column ruler information
+
+set autowriteall  " Auto-write all file changes
+
+set undolevels=1000 " Number of undo levels
+set backspace=indent,eol,start  " Backspace behaviour
+set showcmd
+
+:set hls! " toggle highlighting after the search
+
+" Remove arrows
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
+
+" Remap escape to jj
+inoremap jj <ESC>
+
+" Show dots with indents
+set list listchars=tab:\ \ ,trail:·
+
+" Crontab settings
+autocmd filetype crontab setlocal nobackup nowritebackup
+
+" Swap current line and bottom line
+map - ddp
+" Swap current line and upper line
+map _ kddpk
+
+" Use : instead of ;
+nmap ; :
