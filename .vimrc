@@ -31,6 +31,11 @@ Plug 'mileszs/ack.vim'
 Plug 'brooth/far.vim'
 Plug 'wellle/targets.vim'
 Plug 'thoughtbot/vim-rspec'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'xolox/vim-session'
+Plug 'xolox/vim-misc'
+
+Plug 'Yggdroot/indentLine'
 
 Plug 'elixir-lang/vim-elixir'
 Plug 'slashmili/alchemist.vim'
@@ -46,6 +51,8 @@ Plug 'zenbro/mirror.vim'
 
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
+
+Plug 'ruby-formatter/rufo-vim'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
@@ -218,3 +225,6 @@ set regexpengine=1
 
 " Airline caching speed up
 let g:airline_highlighting_cache=1
+
+" No sessions autosave
+let g:session_autosave = 'no'
