@@ -4,58 +4,44 @@ function! DoRemote(arg)
   UpdateRemotePlugins
 endfunction
 Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+Plug 'Shougo/denite.nvim'
 
 Plug 'https://github.com/altercation/vim-colors-solarized.git'
 
 Plug 'Raimondi/delimitMate'
-Plug 'othree/html5.vim'
-Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
 Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/syntastic'
 Plug 'tomtom/tcomment_vim'
-" Plug 'vim-airline/vim-airline'
 Plug 'itchyny/lightline.vim'
-Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
 Plug 'pangloss/vim-javascript'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-rails'
 Plug 'vim-ruby/vim-ruby'
 Plug 'slim-template/vim-slim'
 Plug 'tpope/vim-surround'
-Plug 'kchmck/vim-coffee-script'
-Plug 'mattn/gist-vim'
-Plug 'mattn/webapi-vim'
 Plug 'mileszs/ack.vim'
-Plug 'brooth/far.vim'
 Plug 'wellle/targets.vim'
-Plug 'thoughtbot/vim-rspec'
-Plug 'jlanzarotta/bufexplorer'
-Plug 'xolox/vim-session'
-Plug 'xolox/vim-misc'
+Plug 'rhysd/clever-f.vim'
+Plug 'machakann/vim-highlightedyank'
+Plug 'jeetsukumaran/vim-buffergator'
+Plug 'Asheq/close-buffers.vim'
+Plug 'junegunn/vim-easy-align'
 
-Plug 'Yggdroot/indentLine'
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
-Plug 'elixir-lang/vim-elixir'
-Plug 'slashmili/alchemist.vim'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'rhysd/committia.vim'
 
-Plug 'posva/vim-vue'
-
-Plug 'fatih/vim-go'
+Plug 'w0rp/ale'
 
 Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
 
 Plug 'zenbro/mirror.vim'
 
-Plug 'Shougo/neosnippet'
-Plug 'Shougo/neosnippet-snippets'
-
-Plug 'ruby-formatter/rufo-vim'
-
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-
 call plug#end()
 
 " Colorscheme
@@ -73,6 +59,9 @@ filetype plugin indent on
 
 " Show hidden files in NerdTree
 let NERDTreeShowHidden=1
+" NerdTree UI
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 " Remove one-child dirs collapsing
 let NERDTreeCascadeSingleChildDir=0
 
@@ -112,6 +101,7 @@ set mouse-=a
 
 " Advanced
 set ruler " Show row and column ruler information
+set inccommand=split
 
 set autowriteall  " Auto-write all file changes
 
@@ -119,24 +109,18 @@ set undolevels=1000 " Number of undo levels
 set backspace=indent,eol,start  " Backspace behaviour
 set showcmd
 
+" Wipe the registers
+command! WipeReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
+
 " path to python interpreter
-let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+let g:ycm_path_to_python_interpreter = '/usr/local/bin/python3'
 
-let g:python_host_prog = '/usr/bin/python'
-
-" JavaScript libraries settings
-let g:used_javascript_libs = 'jquery, angularjs, angularui, react'
-
-" JSX highlighting
-let g:jsx_ext_required = 0
+let g:python_host_prog = '/usr/local/bin/python3'
 
 :set hls! " toggle highlighting after the search
 
 " Syntastic settings
-let g:syntastic_ruby_checkers = ['rubocop']
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_jsx_checkers = ['eslint']
-let g:syntastic_sass_checkers = ['scss_lint']
+" let g:syntastic_ruby_checkers = ['rubocop']
 
 " Remove arrows
 noremap <Up> <NOP>
@@ -149,6 +133,9 @@ nnoremap TN :tabnew<CR>
 nnoremap TQ :tabclose<CR>
 nnoremap TE :tabe %<CR>
 nnoremap TO <C-w>T
+
+nnoremap RS :set syntax=ruby<CR>
+nnoremap RB :! nohup rubocop -a % &<CR><CR>
 
 " Buffers
 nnoremap <Tab>n :buffers<CR>:buffer<SPACE>
@@ -217,14 +204,48 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 cnoreabbrev ag Ack!
 nnoremap <Leader>a :Ack!<Space>
 
+" Open Buffer Explorer
+nnoremap <Leader>b :BufExplorer<CR>
+
 " Slim filetype
 autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
 
 " Set regex engine manually
 set regexpengine=1
 
-" Airline caching speed up
-let g:airline_highlighting_cache=1
-
 " No sessions autosave
 let g:session_autosave = 'no'
+
+" Syntastic settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+" Narrow window
+let g:nrrw_rgn_vert = 1
+
+nnoremap <Leader>q :CloseOtherBuffers<CR>
+
+" Ale settings
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_fixers = { 'ruby': ['rubocop'] }
+let g:ale_fix_on_save = 1
+
+set timeoutlen=1000
+set ttimeoutlen=0
+
+nmap cp :let @* = expand("%")<CR>
+nmap rb :! rubocop -a %<CR>
+
+" With deoplete.nvim
+let g:monster#completion#backend = 'solargraph'
+let g:monster#completion#rcodetools#backend = "async_rct_complete"
+let g:deoplete#sources#omni#input_patterns = {
+\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
+\}
+
+let @s = "cs\"'"
+let @a = 'cs[)'
+let @c = 'ggvG$y'
+
+let g:python3_host_prog='/usr/local/bin/python3'
