@@ -1,0 +1,10 @@
+AllCops:
+  TargetRubyVersion: 2.5.3
+  Exclude:
+    - '.snippets/'
+
+Metrics/LineLength:
+  Max: 100
+
+Documentation:
+  Enabled: false
