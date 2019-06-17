@@ -1,0 +1,47 @@
+*~
+
+tags.*
+tags
+
+# VIM
+*.swp
+*.swo
+
+# Java
+*.class
+
+# Folders
+.DS_Store
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Maven
+target/
+
+# Amazon AWS
+.aws/
+
+# Env variables
+.env.*
+
+# Gems
+config/initializers/simple_form.rb
+lib/templates/
+GeoIP.dat
+
+# Python
+*.pyc
+
+# Dadtabase configs
+.postgresql.conf
+vendor/bundle
+.DS_Store
+
+# Redis
+dump.rdb
+
+src/.snippets
+.snippets

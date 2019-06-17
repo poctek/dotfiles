@@ -1,0 +1,12 @@
+[filter "lfs"]
+	clean = git lfs clean %f
+	smudge = git lfs smudge %f
+	required = true
+[user]
+	name = Rostislav Katin
+	email = poctek5@gmail.com
+[core]
+	editor = vim
+	excludesfile = /Users/poctek/.gitignore
+[github]
+	user = poctek
