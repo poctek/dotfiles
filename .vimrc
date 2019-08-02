@@ -6,7 +6,7 @@ endfunction
 Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
 Plug 'Shougo/denite.nvim'
 
-Plug 'https://github.com/altercation/vim-colors-solarized.git'
+Plug 'https://github.com/morhetz/gruvbox'
 
 Plug 'Raimondi/delimitMate'
 Plug 'scrooloose/nerdtree'
@@ -38,6 +38,7 @@ Plug 'w0rp/ale'
 
 Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
+Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'zenbro/mirror.vim'
 
@@ -45,12 +46,14 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 call plug#end()
 
 " Colorscheme
-colorscheme solarized
+" colorscheme solarized
+colorscheme gruvbox
 set background=dark
 
 filetype plugin indent on
 syntax on
 set t_Co=256
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 set number
 set nocompatible
@@ -136,6 +139,7 @@ nnoremap TO <C-w>T
 
 nnoremap RS :set syntax=ruby<CR>
 nnoremap RB :! nohup rubocop -a % &<CR><CR>
+nnoremap FC :! cat % \| pbcopy &<CR><CR>
 
 " Buffers
 nnoremap <Tab>n :buffers<CR>:buffer<SPACE>
