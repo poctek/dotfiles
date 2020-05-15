@@ -3,12 +3,14 @@ call plug#begin('~/.vim/plugged')
 function! DoRemote(arg)
   UpdateRemotePlugins
 endfunction
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'tag': '5.1' }
 Plug 'Shougo/denite.nvim'
 
 Plug 'https://github.com/morhetz/gruvbox'
+" Plug 'altercation/vim-colors-solarized'
 
-Plug 'Raimondi/delimitMate'
+" Plug 'Raimondi/delimitMate'
+Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
 Plug 'tomtom/tcomment_vim'
 Plug 'itchyny/lightline.vim'
@@ -19,6 +21,9 @@ Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-rails'
 Plug 'vim-ruby/vim-ruby'
+Plug 'plasticboy/vim-markdown'
+Plug 'junegunn/goyo.vim'
+Plug 'janko/vim-test'
 Plug 'slim-template/vim-slim'
 Plug 'tpope/vim-surround'
 Plug 'mileszs/ack.vim'
@@ -40,18 +45,18 @@ Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'AndrewRadev/splitjoin.vim'
 
-Plug 'zenbro/mirror.vim'
-
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+Plug 'lyokha/vim-xkbswitch'
 call plug#end()
 
 " Colorscheme
-" colorscheme solarized
 colorscheme gruvbox
+syntax enable
 set background=dark
+" colorscheme solarized
 
 filetype plugin indent on
-syntax on
 set t_Co=256
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
@@ -60,22 +65,7 @@ set nocompatible
 
 filetype plugin indent on
 
-" Show hidden files in NerdTree
-let NERDTreeShowHidden=1
-" NerdTree UI
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-" Remove one-child dirs collapsing
-let NERDTreeCascadeSingleChildDir=0
-
 au FocusLost User :wa
-
-map <C-n> :NERDTreeToggle<CR>
-
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
 
 "  General
 set relativenumber
@@ -102,9 +92,12 @@ set tabstop=2 " Number of spaces per Tab
 set shiftwidth=2  " Number of auto-indent spaces
 set mouse-=a
 
+set nopaste
+
 " Advanced
 set ruler " Show row and column ruler information
 set inccommand=split
+:set hls! " Toggle highlighting after the search
 
 set autowriteall  " Auto-write all file changes
 
@@ -112,24 +105,54 @@ set undolevels=1000 " Number of undo levels
 set backspace=indent,eol,start  " Backspace behaviour
 set showcmd
 
+set timeoutlen=1000
+set ttimeoutlen=0
+
+" More symbols on the line
+set tw=500
+
+" Set regex engine manually
+set regexpengine=1
+
+" Show dots with indents
+set list listchars=tab:\ \ ,trail:·
+
+" Highlight current column
+set cuc cul"
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
 " Wipe the registers
 command! WipeReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
 
+" No sessions autosave
+let g:session_autosave = 'no'
+
 " path to python interpreter
 let g:ycm_path_to_python_interpreter = '/usr/local/bin/python3'
-
 let g:python_host_prog = '/usr/local/bin/python3'
+let g:python3_host_prog='/usr/local/bin/python3'
 
-:set hls! " toggle highlighting after the search
+" Narrow window
+let g:nrrw_rgn_vert = 1
 
-" Syntastic settings
-" let g:syntastic_ruby_checkers = ['rubocop']
+" Crontab settings
+autocmd filetype crontab setlocal nobackup nowritebackup
 
+
+" ==== MAPPINGS ====
 " Remove arrows
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
+
+" Splits navigation
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 " Tabs
 nnoremap TN :tabnew<CR>
@@ -146,15 +169,10 @@ nnoremap <Tab>n :buffers<CR>:buffer<SPACE>
 
 " Remap escape to jj
 inoremap jj <ESC>
+inoremap оо оо
 
 " Search visual selection
 vnoremap // y/<C-R>"<CR>
-
-" Show dots with indents
-set list listchars=tab:\ \ ,trail:·
-
-" Crontab settings
-autocmd filetype crontab setlocal nobackup nowritebackup
 
 " Swap current line and bottom line
 map - ddp
@@ -167,39 +185,21 @@ nmap ; :
 " \\ to navigate last to open files
 nnoremap <leader><leader> <c-^>
 
-" ==== Ruby aliases ====
-map <Leader>rs f:xi =>jj
+nnoremap <Leader>q :CloseOtherBuffers<CR>
+" Copy current file path to the system buffer
+nmap cp :let @* = expand("%")<CR>
+" Copy current line to system buffer
+nmap <leader>Y ^v$h"*y<CR>
 
+
+"==== PLUGINS ====
 " FZF config
 map <C-p> :FZF<CR>
 let $FZF_DEFAULT_COMMAND='ag -g ""'
 
-" More symbols on the line
-set tw=500
-
-" Highlight current column
-set cuc cul"
-
-" Snipets config
-let g:UltiSnipsExpandTrigger="<C-tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
 " Deoplete config
 let g:deoplete#enable_at_startup = 1
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-" Neosnippet config
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
 
 " Ack.vim config
 let g:ackprg = 'ag --nogroup --nocolor --column'
@@ -211,45 +211,66 @@ nnoremap <Leader>a :Ack!<Space>
 " Open Buffer Explorer
 nnoremap <Leader>b :BufExplorer<CR>
 
-" Slim filetype
-autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
-
-" Set regex engine manually
-set regexpengine=1
-
-" No sessions autosave
-let g:session_autosave = 'no'
-
 " Syntastic settings
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-" Narrow window
-let g:nrrw_rgn_vert = 1
-
-nnoremap <Leader>q :CloseOtherBuffers<CR>
+" NERDTree
+let NERDTreeShowHidden=1 " Show hidden files in NerdTree
+let NERDTreeCascadeSingleChildDir=0 " Remove one-child dirs collapsing
+" NerdTree UI
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+map <C-n> :NERDTreeToggle<CR>
+map ,n :NERDTreeFind<CR>
 
 " Ale settings
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = { 'ruby': ['rubocop'] }
 let g:ale_fix_on_save = 1
+let g:ale_ruby_rubocop_executable = 'bundle'
 
-set timeoutlen=1000
-set ttimeoutlen=0
+" vim-test mappings
+map <Leader>l :TestLast<CR>
+map <Leader>s :TestNearest<CR>
+map <Leader>f :TestFile<CR>
+let test#strategy = "basic"
 
-nmap cp :let @* = expand("%")<CR>
-nmap rb :! rubocop -a %<CR>
+" Vim markdown settings
+let g:markdown_fenced_languages = ['json=javascript', 'ruby']
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_folding_style_pythonic = 1
+" let g:vim_markdown_folding_disabled = 1
 
-" With deoplete.nvim
-let g:monster#completion#backend = 'solargraph'
-let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#sources#omni#input_patterns = {
-\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
-\}
+" Vim goyo
+let g:goyo_width = 160
 
-let @s = "cs\"'"
-let @a = 'cs[)'
-let @c = 'ggvG$y'
+" Enable russian vim mappings
+let g:XkbSwitchEnabled = 1
+let g:XkbSwitchIMappings = ['ru']
 
-let g:python3_host_prog='/usr/local/bin/python3'
+
+" ==== FUNCTIONS ====
+" Parent dir/subdir navigation for running different gems specs
+function! CdToSubdir()
+  execute 'lcd' fnameescape(split(expand('%'), "/")[0])
+  pwd
+endfunction
+
+function! CdToParentDir()
+  lcd ../
+  pwd
+endfunction
+
+nmap <leader>w :call CdToSubdir()<CR>
+nmap <leader>e :call CdToParentDir()<CR>
+
+" Lexy call to open spec file for current class
+function! SpecFileFor(path)
+  let cmd = "lexy find_spec_file " . a:path . " 2> /dev/null"
+  let spec_file = system(cmd)
+
+  execute("e " . spec_file)  
+endfunction
+
+nmap SF :call SpecFileFor(expand("%:p"))<CR>
