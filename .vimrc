@@ -21,6 +21,7 @@ Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-rails'
 Plug 'vim-ruby/vim-ruby'
+Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'junegunn/goyo.vim'
 Plug 'janko/vim-test'
@@ -189,7 +190,7 @@ nnoremap <Leader>q :CloseOtherBuffers<CR>
 " Copy current file path to the system buffer
 nmap cp :let @* = expand("%")<CR>
 " Copy current line to system buffer
-nmap <leader>Y ^v$h"*y<CR>
+nmap <leader>Y "*yy
 
 
 "==== PLUGINS ====
@@ -231,9 +232,10 @@ let g:ale_fix_on_save = 1
 let g:ale_ruby_rubocop_executable = 'bundle'
 
 " vim-test mappings
-map <Leader>l :TestLast<CR>
-map <Leader>s :TestNearest<CR>
-map <Leader>f :TestFile<CR>
+" map <Leader>l :TestLast<CR>
+map <Leader>l :call RunCustomSpec('TestLast')<CR>
+map <Leader>s :call RunCustomSpec('TestNearest')<CR>
+map <Leader>f :call RunCustomSpec('TestFile')<CR>
 let test#strategy = "basic"
 
 " Vim markdown settings
@@ -252,8 +254,12 @@ let g:XkbSwitchIMappings = ['ru']
 
 " ==== FUNCTIONS ====
 " Parent dir/subdir navigation for running different gems specs
-function! CdToSubdir()
-  execute 'lcd' fnameescape(split(expand('%'), "/")[0])
+function! CdToSpecDir()
+  let spec_index = index(split(expand("%:p"), "/"), "spec")
+  let target_index = spec_index - 1
+  let path = "/" . join(split(expand('%:p'), "/")[0:target_index], "/")
+
+  execute 'lcd' fnameescape(path)
   pwd
 endfunction
 
@@ -262,7 +268,12 @@ function! CdToParentDir()
   pwd
 endfunction
 
-nmap <leader>w :call CdToSubdir()<CR>
+function! RunCustomSpec(command)
+  call CdToSpecDir()
+  execute(a:command)
+endfunction
+
+nmap <leader>w :call CdToSpecDir()<CR>
 nmap <leader>e :call CdToParentDir()<CR>
 
 " Lexy call to open spec file for current class
@@ -274,3 +285,10 @@ function! SpecFileFor(path)
 endfunction
 
 nmap SF :call SpecFileFor(expand("%:p"))<CR>
+
+function! AgUnderCursor()
+  let cmd = 'Ack! ' . expand('<cword>')
+
+  execute(cmd)
+endfunction
+nmap <leader>g :call AgUnderCursor()<CR>
